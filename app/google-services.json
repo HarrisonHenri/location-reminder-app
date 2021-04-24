@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "431440456354",
+    "project_id": "udacity-location-reminde-164a3",
+    "storage_bucket": "udacity-location-reminde-164a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431440456354:android:8fe92bfe4eb07dd281c5fb",
+        "android_client_info": {
+          "package_name": "com.udacity.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "431440456354-bsv5s5l2lrj2st4qh2vob3ckd63hjckn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.udacity.project4",
+            "certificate_hash": "c380e237cb568d40881d7c0d12def3fd4d60cb13"
+          }
+        },
+        {
+          "client_id": "431440456354-opvc9mjpdvva1f6l10bf1d9ldkahjc0g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARXHnP8bwnXbLOCgfov52U1F5QOaK6E9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "431440456354-opvc9mjpdvva1f6l10bf1d9ldkahjc0g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
