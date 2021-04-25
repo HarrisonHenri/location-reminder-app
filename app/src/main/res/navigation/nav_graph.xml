@@ -11,6 +11,9 @@
         <action
             android:id="@+id/to_save_reminder"
             app:destination="@id/saveReminderFragment" />
+        <action
+            android:id="@+id/to_authentication"
+            app:destination="@id/authenticationFragment" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -31,5 +34,10 @@
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment"
         android:label="Select Location" />
+
+    <fragment
+        android:id="@+id/authenticationFragment"
+        android:name="com.udacity.project4.authentication.AuthenticationFragment"
+        android:label="AuthenticationFragment" />
 
 </navigation>

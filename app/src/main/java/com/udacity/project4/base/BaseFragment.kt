@@ -38,6 +38,12 @@ abstract class BaseFragment : Fragment() {
                     command.destinationId,
                     false
                 )
+                is NavigationCommand.StartActivity -> with(command) {
+                    startActivityForResult(
+                            intent,
+                            requestCode
+                    )
+                }
             }
         })
     }

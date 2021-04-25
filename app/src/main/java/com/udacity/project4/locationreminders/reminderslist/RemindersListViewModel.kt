@@ -1,16 +1,21 @@
 package com.udacity.project4.locationreminders.reminderslist
 
 import android.app.Application
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.udacity.project4.base.BaseViewModel
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.launch
 
 class RemindersListViewModel(
-    app: Application,
+    private val app: Application,
     private val dataSource: ReminderDataSource
 ) : BaseViewModel(app) {
     // list that holds the reminder data to be displayed on the UI
@@ -56,5 +61,34 @@ class RemindersListViewModel(
      */
     private fun invalidateShowNoData() {
         showNoData.value = remindersList.value == null || remindersList.value!!.isEmpty()
+    }
+
+    fun onLogout() {
+        AuthUI.getInstance().signOut(app)
+    }
+
+    fun onAddReminderCliked() {
+        val user = Firebase.auth.currentUser
+
+        if (user != null){
+            navigateToAddReminder()
+        } else {
+            navigateToAuthentication()
+        }
+    }
+
+    private fun navigateToAddReminder() {
+        //use the navigationCommand live data to navigate between the fragments
+        navigationCommand.postValue(
+                NavigationCommand.To(
+                        ReminderListFragmentDirections.toSaveReminder()
+                )
+        )
+    }
+
+    private fun navigateToAuthentication() {
+        navigationCommand.postValue(
+                NavigationCommand.To(ReminderListFragmentDirections.toAuthentication())
+        )
     }
 }
