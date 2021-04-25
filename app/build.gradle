@@ -54,6 +54,12 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    // Firebase dependencies
+    implementation platform("com.google.firebase:firebase-bom:$firebaseBomVersion")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.firebaseui:firebase-ui-auth:$firebaseUiAuthVersion")
+
     // Architecture Components
     //Navigation dependencies
     implementation 'androidx.appcompat:appcompat:1.2.0'
