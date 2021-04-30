@@ -18,4 +18,7 @@ abstract class BaseViewModel(app: Application) : AndroidViewModel(app) {
     val showLoading: SingleLiveEvent<Boolean> = SingleLiveEvent()
     val showNoData: MutableLiveData<Boolean> = MutableLiveData()
 
+    fun navigateBack() {
+        navigationCommand.value = NavigationCommand.Back
+    }
 }

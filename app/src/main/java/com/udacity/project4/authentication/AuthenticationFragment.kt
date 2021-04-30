@@ -1,15 +1,11 @@
 package com.udacity.project4.authentication
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
-import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
+import androidx.navigation.fragment.findNavController
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.databinding.AuthenticationFragmentBinding
 import com.udacity.project4.utils.Constants.SIGN_IN_REQUEST_CODE
@@ -39,6 +35,7 @@ class AuthenticationFragment : BaseFragment() {
         if (requestCode == SIGN_IN_REQUEST_CODE) {
             _viewModel.onLoginResult(resultCode)
         }
+        _viewModel.navigateBack()
     }
 }
 

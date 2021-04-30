@@ -5,4 +5,5 @@ object Constants {
         AUTHENTICATED, UNAUTHENTICATED
     }
     const val SIGN_IN_REQUEST_CODE = 1
+    const val MAP_ZOOM = 15f
 }
