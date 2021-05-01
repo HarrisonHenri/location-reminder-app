@@ -1,15 +1,26 @@
 package com.udacity.project4.locationreminders.savereminder
 
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
+import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import com.udacity.project4.utils.Constants.ACTION_GEOFENCE_EVENT
+import com.udacity.project4.utils.checkFineLocationPermission
 import kotlinx.coroutines.launch
 
 class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSource) :
@@ -21,6 +32,17 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
     val isLocationSelected = MutableLiveData<Boolean>()
+
+    private val geofencingClient = LocationServices.getGeofencingClient(app)
+    private val geofencePendingIntent by lazy {
+        val intent = Intent(app, GeofenceBroadcastReceiver::class.java)
+        PendingIntent.getBroadcast(
+                app,
+                ACTION_GEOFENCE_EVENT,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -35,17 +57,65 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     }
 
     /**
-     * Validate the entered data then saves the reminder data to the DataSource
+     * Save the reminder to the data source
      */
-    fun validateAndSaveReminder(reminderData: ReminderDataItem) {
-        if (validateEnteredData(reminderData)) {
-            saveReminder(reminderData)
+
+    fun onSaveReminderClicked() {
+        val reminder = ReminderDataItem(
+            reminderTitle.value,
+            reminderDescription.value,
+            reminderSelectedLocationStr.value,
+            latitude.value,
+            longitude.value
+        )
+        if (validateEnteredData(reminder)) {
+            val geofence = Geofence.Builder()
+                    .setRequestId(reminder.id)
+                    .setCircularRegion(
+                            reminder.latitude!!,
+                            reminder.longitude!!,
+                            150f
+                    )
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .build()
+            if (geofence != null && checkFineLocationPermission(app)) {
+                val geofencingRequest = GeofencingRequest.Builder()
+                        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                        .addGeofence(geofence)
+                        .build()
+                geofencingClient.addGeofences(geofencingRequest,
+                        geofencePendingIntent)
+                        .addOnSuccessListener {
+                            saveReminder(reminder)
+                        }
+                        .addOnFailureListener {
+                            showToast.value = if (it is ApiException) {
+                                getErrorString(app, it.statusCode)
+                            } else {
+                                app.resources.getString(R.string.geofence_unknown_error)
+                            }
+                        }
+            }
         }
     }
 
-    /**
-     * Save the reminder to the data source
-     */
+    private fun getErrorString(context: Context, errorCode: Int): String {
+        val resources = context.resources
+        return when (errorCode) {
+            GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE ->
+                resources.getString(R.string.geofence_not_available)
+
+            GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES ->
+                resources.getString(R.string.geofence_too_many_geofences)
+
+            GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS ->
+                resources.getString(R.string.geofence_too_many_pending_intents)
+
+            else -> resources.getString(R.string.geofence_unknown_error)
+        }
+    }
+
     fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
         viewModelScope.launch {
@@ -61,8 +131,12 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
             )
             showLoading.value = false
             showToast.value = app.getString(R.string.reminder_saved)
-            navigationCommand.value = NavigationCommand.Back
         }
+        navigateBack()
+    }
+
+    fun navigateToSelectLocation() {
+        navigationCommand.value = NavigationCommand.To(SaveReminderFragmentDirections.toSelectLocation())
     }
 
     /**

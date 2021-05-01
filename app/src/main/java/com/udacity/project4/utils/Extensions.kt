@@ -16,6 +16,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,20 +80,22 @@ fun View.fadeOut() {
 }
 
 fun Activity.hasAllLocationPermissions(): Boolean {
-    return hasBaseLocationPermissions() && hasAndroidOreoPermissions(this) && hasAndroidRPermissions(this)
+    return checkFineLocationPermission(this) && checkCoarseLocationPermission(this) && checkAndroidOreoPermission(this) && checkAndroidRPermission(this)
 }
 
 
-fun Activity.hasBaseLocationPermissions(): Boolean {
-    return (ActivityCompat.checkSelfPermission(this,
-            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this,
+fun checkFineLocationPermission(context: Context): Boolean {
+    return (ContextCompat.checkSelfPermission(context,
+            Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+}
+
+fun checkCoarseLocationPermission(context: Context): Boolean {
+    return (ContextCompat.checkSelfPermission(context,
             Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
 }
 
-
 @TargetApi(Build.VERSION_CODES.Q)
-private fun hasAndroidOreoPermissions(activity: Activity): Boolean {
+private fun checkAndroidOreoPermission(activity: Activity): Boolean {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) return true
     return when (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_BACKGROUND_LOCATION)) {
         PackageManager.PERMISSION_GRANTED -> true
@@ -101,7 +104,7 @@ private fun hasAndroidOreoPermissions(activity: Activity): Boolean {
 }
 
 @TargetApi(Build.VERSION_CODES.R)
-private fun hasAndroidRPermissions(activity: Activity): Boolean {
+private fun checkAndroidRPermission(activity: Activity): Boolean {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) return true
     return when {
         ActivityCompat.checkSelfPermission(activity,
