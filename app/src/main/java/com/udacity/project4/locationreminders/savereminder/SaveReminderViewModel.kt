@@ -36,12 +36,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     private val geofencingClient = LocationServices.getGeofencingClient(app)
     private val geofencePendingIntent by lazy {
         val intent = Intent(app, GeofenceBroadcastReceiver::class.java)
-        PendingIntent.getBroadcast(
-                app,
-                ACTION_GEOFENCE_EVENT,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        intent.action = ACTION_GEOFENCE_EVENT
+        PendingIntent.getBroadcast(app, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     /**
