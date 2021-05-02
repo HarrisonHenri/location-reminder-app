@@ -47,16 +47,16 @@ class SaveReminderViewModelTest {
 
     @Test
     fun saveReminderViewModelTest_whenSavingReminder_shouldShowLoadingAndNavigateBack() {
-        val reminderDataItem = ReminderDataItem(
-                "Philippines",
-                "Location of Philippines",
-                "Thailand",
-                12.8797,
-                121.7740,
+        val reminder = ReminderDataItem(
+                "Salvador",
+                "Any local at Salvador",
+                "Salvador",
+                32.8797,
+                -121.0,
                 "1"
         )
         mainCoroutineRule.pauseDispatcher()
-        saveReminderViewModel.saveReminder(reminderDataItem)
+        saveReminderViewModel.saveReminder(reminder)
         var showLoading = saveReminderViewModel.showLoading.getOrAwaitValue()
         val navigate = saveReminderViewModel.navigationCommand.getOrAwaitValue()
         assertThat(showLoading, `is`(true))
@@ -68,15 +68,15 @@ class SaveReminderViewModelTest {
 
     @Test
     fun saveReminderViewModelTest_whenSavingReminderWithNullLocation_shouldShowLoadingAndNavigateBack() {
-        val reminderDataItem = ReminderDataItem(
-                "Singapore",
-                "Singapore",
-                null,
-                1.3521,
-                103.8198,
-                "2"
+        val reminder = ReminderDataItem(
+                "Salvador",
+                "Any local at Salvador",
+                "Salvador",
+                32.8797,
+                -121.0,
+                "1"
         )
-        assertThat(saveReminderViewModel.validateEnteredData(reminderDataItem), `is`(false))
+        assertThat(saveReminderViewModel.validateEnteredData(reminder), `is`(false))
         assertThat(
                 saveReminderViewModel.showSnackBarInt.getOrAwaitValue(),
                 `is`(R.string.err_select_location)
