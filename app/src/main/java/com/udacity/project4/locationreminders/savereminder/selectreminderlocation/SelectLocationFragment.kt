@@ -26,6 +26,7 @@ import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.*
 import com.udacity.project4.utils.Constants.MAP_ZOOM
+import com.udacity.project4.utils.EspressoIdlingResource.wrapEspressoIdlingResource
 import com.udacity.project4.utils.hasAllLocationPermissions
 import com.udacity.project4.utils.showPermissionSnackBar
 
@@ -144,7 +145,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             marker.showInfoWindow()
-            _viewModel.isLocationSelected.postValue(true)
+            wrapEspressoIdlingResource{
+                _viewModel.isLocationSelected.postValue(true)
+            }
         }
     }
 
@@ -163,7 +166,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             selectedPointOfInterest = poi
 
             marker.showInfoWindow()
-            _viewModel.isLocationSelected.postValue(true)
+            wrapEspressoIdlingResource{
+                _viewModel.isLocationSelected.postValue(true)
+            }
         }
     }
 
