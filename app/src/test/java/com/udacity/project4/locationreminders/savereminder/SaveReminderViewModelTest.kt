@@ -26,7 +26,6 @@ import org.hamcrest.MatcherAssert.assertThat
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class SaveReminderViewModelTest {
 
-    //TODO: provide testing to the SaveReminderView and its live data objects
     @get: Rule
     var mainCoroutineRule = MainCoroutineRule()
 

@@ -25,7 +25,6 @@ import org.junit.Test
 @Config(sdk = [Build.VERSION_CODES.O_MR1])
 class RemindersListViewModelTest {
 
-    //TODO: provide testing to the RemindersListViewModel and its live data objects
     @get: Rule
     var mainCoroutineRule = MainCoroutineRule()
 
