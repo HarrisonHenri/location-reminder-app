@@ -70,7 +70,7 @@ class SaveReminderViewModelTest {
         val reminder = ReminderDataItem(
                 "Salvador",
                 "Any local at Salvador",
-                "Salvador",
+                null,
                 32.8797,
                 -121.0,
                 "1"
