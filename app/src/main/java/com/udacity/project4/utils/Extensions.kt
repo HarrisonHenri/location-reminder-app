@@ -7,6 +7,7 @@ import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -21,6 +22,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig
 import com.udacity.project4.R
@@ -131,4 +138,24 @@ fun Activity.showPermissionSnackBar(view: View){
             flags = Intent.FLAG_ACTIVITY_NEW_TASK
         })
     }.show()
+}
+
+fun Activity.getLocationRequestTask(resolve: Boolean = true): Task<LocationSettingsResponse> {
+    val locationRequest = LocationRequest.create().apply {
+        priority = LocationRequest.PRIORITY_LOW_POWER
+    }
+    val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
+    val settingsClient = LocationServices.getSettingsClient(this)
+    val locationSettingsResponseTask = settingsClient.checkLocationSettings(builder.build())
+    locationSettingsResponseTask.addOnFailureListener { exception ->
+        if (exception is ResolvableApiException && resolve){
+            try { exception.startResolutionForResult(this,
+                    1)
+            } catch (sendEx: IntentSender.SendIntentException) {
+            }
+        } else {
+            getLocationRequestTask()
+        }
+    }
+    return locationSettingsResponseTask
 }

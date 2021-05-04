@@ -115,4 +115,19 @@ class ReminderListFragmentTest: AutoCloseKoinTest() {
         )
 
     }
+
+    @Test
+    fun reminderListFragmentTest_whenThereIsError_shouldInUi() = runBlocking {
+        val fragmentScenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        dataBindingIdlingResource.monitorFragment(fragmentScenario)
+
+        fragmentScenario.onFragment {
+            it._viewModel.showSnackBar.postValue("Error happened")
+        }
+
+        onView(withText("Error happened")).check(matches(isDisplayed()))
+
+        repository.deleteAllReminders()
+    }
+
 }
