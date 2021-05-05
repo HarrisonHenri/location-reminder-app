@@ -130,4 +130,13 @@ class ReminderListFragmentTest: AutoCloseKoinTest() {
         repository.deleteAllReminders()
     }
 
+    @Test
+    fun reminderListFragmentTest_whenThereIsNoData_shouldDisplayNoDataView() = runBlocking {
+        repository.deleteAllReminders()
+        val fragmentScenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        dataBindingIdlingResource.monitorFragment(fragmentScenario)
+        onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
+        repository.deleteAllReminders()
+    }
+
 }
