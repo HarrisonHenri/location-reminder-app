@@ -49,6 +49,14 @@ $ git clone https://github.com/HarrisonHenri/location-reminder-app
 * [Navigation](https://developer.android.com/topic/libraries/architecture/navigation/) 
 * [Espresso](https://developer.android.com/training/testing/espresso/) 
 * [Koin](https://insert-koin.io/) 
+* [Material](https://material.io/develop/android/docs/getting-started) 
+* [Gson](https://github.com/google/gson) 
+* [Firebase Login](https://firebase.google.com/docs/auth/web/firebaseui) 
+* [Room](https://developer.android.com/jetpack/androidx/releases/room?gclid=Cj0KCQjw78yFBhCZARIsAOxgSx0aOuUsaoZge4mm8WqKB-0Hi-tA7-WMLFxfAm-yb9NJsh6rphlp2ScaAovQEALw_wcB&gclsrc=aw.ds)
+* [Hamcrest](http://hamcrest.org/) 
+* [Robolectric](http://robolectric.org/) 
+* [Espresso](https://developer.android.com/training/testing/espresso) 
+* [Mockito](https://site.mockito.org/) 
 
 ## Contributing
 
